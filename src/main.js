@@ -5,6 +5,9 @@ let scene,
   light,
   ambient,
   camera,
+  gridHelper,
+  axisHelper,
+  lightHelper,
   renderer,
   width = 500,
   height = 250;
@@ -32,6 +35,14 @@ scene.add(ambient);
 camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
 camera.position.set(200, 100, 300);
 camera.lookAt(scene.position);
+
+// helper
+gridHelper = new THREE.GridHelper(200, 20);
+scene.add(gridHelper);
+axisHelper = new THREE.AxesHelper(1000);
+scene.add(axisHelper);
+lightHelper = new THREE.DirectionalLightHelper(light, 20);
+scene.add(lightHelper);
 
 //renderer
 renderer = new THREE.WebGLRenderer({ antialias: true });
