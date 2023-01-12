@@ -1,4 +1,3 @@
-import { render } from "sass";
 import * as THREE from "three";
 
 let scene,
@@ -22,9 +21,14 @@ scene.add(box);
 
 // camera
 camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
-camera.position(200, 100, 300);
+camera.position.set(200, 100, 300);
 camera.lookAt(scene.position);
 
 //renderer
 renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(width, height);
+renderer.setClearColor(0xefefef);
+renderer.setPixelRatio(window.devicePixelRatio);
+
+document.getElementById("stage").appendChild(renderer.domElement);
+renderer.render(scene, camera);
