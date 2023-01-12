@@ -2,6 +2,8 @@ import * as THREE from "three";
 
 let scene,
   box,
+  light,
+  ambient,
   camera,
   renderer,
   width = 500,
@@ -14,10 +16,17 @@ scene = new THREE.Scene();
 // -material 材質
 box = new THREE.Mesh(
   new THREE.BoxGeometry(50, 50, 50),
-  new THREE.MeshLambertMaterial({ color: 0xff000 })
+  new THREE.MeshLambertMaterial({ color: 0xff0000 })
 );
 box.position.set(0, 0, 0);
 scene.add(box);
+
+// light
+light = new THREE.DirectionalLight(0xffffff, 1);
+light.position.set(0, 100, 30);
+scene.add(light);
+ambient = new THREE.AmbientLight(0x404040, 1);
+scene.add(ambient);
 
 // camera
 camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
