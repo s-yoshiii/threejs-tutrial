@@ -1,7 +1,9 @@
 import * as THREE from "three";
 
 let scene,
-  box,
+  person,
+  head,
+  body,
   light,
   ambient,
   camera,
@@ -22,14 +24,23 @@ scene = new THREE.Scene();
 // -position
 // -scale
 // -rotation
-box = new THREE.Mesh(
-  new THREE.BoxGeometry(50, 50, 50),
+head = new THREE.Mesh(
+  new THREE.BoxGeometry(20, 20, 20),
   new THREE.MeshLambertMaterial({ color: 0xff0000 })
 );
-box.position.set(0, 0, 0);
-box.scale.x = 2;
-box.rotation.x = (45 * Math.PI) / 180;
-scene.add(box);
+head.position.set(0, 40, 0);
+
+body = new THREE.Mesh(
+  new THREE.BoxGeometry(40, 60, 40),
+  new THREE.MeshLambertMaterial({ color: 0xff0000 })
+);
+body.position.set(0, 0, 0);
+
+//物体のグループ化
+person = new THREE.Group();
+person.add(head);
+person.add(body);
+scene.add(person);
 
 // light
 light = new THREE.DirectionalLight(0xffffff, 1);
@@ -58,17 +69,17 @@ renderer.setClearColor(0xefefef);
 renderer.setPixelRatio(window.devicePixelRatio);
 
 document.getElementById("stage").appendChild(renderer.domElement);
-renderer.render(scene, camera);
-// function render() {
-//   requestAnimationFrame(render);
-//   // カメラ回転
-//   theta += 0.1;
-//   camera.position.x = Math.cos(THREE.MathUtils.degToRad(theta)) * 300;
-//   camera.position.z = Math.sin(THREE.MathUtils.degToRad(theta)) * 300;
-//   camera.lookAt(scene.position);
+// renderer.render(scene, camera);
+function render() {
+  requestAnimationFrame(render);
+  // カメラ回転
+  // theta += 0.1;
+  // camera.position.x = Math.cos(THREE.MathUtils.degToRad(theta)) * 300;
+  // camera.position.z = Math.sin(THREE.MathUtils.degToRad(theta)) * 300;
+  // camera.lookAt(scene.position);
 
-//   // 物体の回転
-//   box.rotation.y += 0.01;
-//   renderer.render(scene, camera);
-// }
-// render();
+  // 物体の回転
+  person.rotation.y += 0.01;
+  renderer.render(scene, camera);
+}
+render();
