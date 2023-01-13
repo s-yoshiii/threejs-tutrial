@@ -18,11 +18,17 @@ scene = new THREE.Scene();
 // mesh 物体
 // -geometry 形状
 // -material 材質
+// 操作
+// -position
+// -scale
+// -rotation
 box = new THREE.Mesh(
   new THREE.BoxGeometry(50, 50, 50),
   new THREE.MeshLambertMaterial({ color: 0xff0000 })
 );
 box.position.set(0, 0, 0);
+box.scale.x = 2;
+box.rotation.x = (45 * Math.PI) / 180;
 scene.add(box);
 
 // light
@@ -52,14 +58,17 @@ renderer.setClearColor(0xefefef);
 renderer.setPixelRatio(window.devicePixelRatio);
 
 document.getElementById("stage").appendChild(renderer.domElement);
+renderer.render(scene, camera);
+// function render() {
+//   requestAnimationFrame(render);
+//   // カメラ回転
+//   theta += 0.1;
+//   camera.position.x = Math.cos(THREE.MathUtils.degToRad(theta)) * 300;
+//   camera.position.z = Math.sin(THREE.MathUtils.degToRad(theta)) * 300;
+//   camera.lookAt(scene.position);
 
-function render() {
-  requestAnimationFrame(render);
-  theta += 0.1;
-  camera.position.x = Math.cos(THREE.MathUtils.degToRad(theta)) * 300;
-  camera.position.z = Math.sin(THREE.MathUtils.degToRad(theta)) * 300;
-  camera.lookAt(scene.position);
-  // box.rotation.y += 0.01;
-  renderer.render(scene, camera);
-}
-render();
+//   // 物体の回転
+//   box.rotation.y += 0.01;
+//   renderer.render(scene, camera);
+// }
+// render();
