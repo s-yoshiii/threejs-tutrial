@@ -4,6 +4,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 let scene,
   person,
   head,
+  box,
   body,
   light,
   sphere1,
@@ -15,6 +16,7 @@ let scene,
   gridHelper,
   axisHelper,
   lightHelper,
+  shadowHelper,
   renderer,
   controls,
   width = 500,
@@ -30,6 +32,13 @@ scene = new THREE.Scene();
 // -position
 // -scale
 // -rotation
+box = new THREE.Mesh(
+  new THREE.BoxGeometry(10, 10, 90),
+  new THREE.MeshLambertMaterial({ color: 0xff0000 })
+);
+box.position.set(-70, 40, 0);
+scene.add(box);
+
 head = new THREE.Mesh(
   new THREE.BoxGeometry(20, 20, 20),
   new THREE.MeshLambertMaterial({ color: 0xff0000 })
@@ -107,8 +116,20 @@ renderer.setSize(width, height);
 renderer.setClearColor(0xefefef);
 renderer.setPixelRatio(window.devicePixelRatio);
 
+// shadow
+renderer.shadowMap.enabled = true;
+light.castShadow = true;
+light.shadow.camera.left = -200;
+light.shadow.camera.right = 200;
+light.shadow.camera.top = 200;
+light.shadow.camera.bottom = -200;
+
+shadowHelper = new THREE.CameraHelper(light.shadow.camera);
+scene.add(shadowHelper);
+box.castShadow = true;
+plane.receiveShadow = true;
+
 //controls
-console.log(renderer.domElement);
 controls = new OrbitControls(camera, renderer.domElement);
 // controls.autoRotate = true;
 
