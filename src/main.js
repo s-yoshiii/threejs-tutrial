@@ -6,6 +6,8 @@ let scene,
   head,
   body,
   light,
+  sphere,
+  plane,
   ambient,
   camera,
   gridHelper,
@@ -43,6 +45,23 @@ person = new THREE.Group();
 person.add(head);
 person.add(body);
 scene.add(person);
+
+// sphere
+sphere = new THREE.Mesh(
+  new THREE.SphereGeometry(50, 20, 20),
+  new THREE.MeshLambertMaterial({ color: 0xff0000 })
+);
+sphere.position.set(100, 0, 0);
+scene.add(sphere);
+
+// plane
+plane = new THREE.Mesh(
+  new THREE.PlaneGeometry(200, 200),
+  new THREE.MeshLambertMaterial({ color: 0x0096d6, side: THREE.DoubleSide })
+);
+plane.position.set(0, 0, 0);
+plane.rotation.x = (90 * Math.PI) / 180;
+scene.add(plane);
 
 // light
 light = new THREE.DirectionalLight(0xffffff, 1);
