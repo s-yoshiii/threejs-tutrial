@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 let scene,
   person,
@@ -11,6 +12,7 @@ let scene,
   axisHelper,
   lightHelper,
   renderer,
+  controls,
   width = 500,
   height = 250,
   theta = 0;
@@ -68,6 +70,11 @@ renderer.setSize(width, height);
 renderer.setClearColor(0xefefef);
 renderer.setPixelRatio(window.devicePixelRatio);
 
+//controls
+console.log(renderer.domElement);
+controls = new OrbitControls(camera, renderer.domElement);
+// controls.autoRotate = true;
+
 document.getElementById("stage").appendChild(renderer.domElement);
 // renderer.render(scene, camera);
 function render() {
@@ -79,7 +86,9 @@ function render() {
   // camera.lookAt(scene.position);
 
   // 物体の回転
-  person.rotation.y += 0.01;
+  // person.rotation.y += 0.01;
+
+  controls.update();
   renderer.render(scene, camera);
 }
 render();
