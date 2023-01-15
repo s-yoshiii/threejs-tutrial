@@ -360,7 +360,7 @@ class Slider {
   }
 
   listeners() {
-    setInterval(this.nextSlide, 5000, { passive: true });
+    setInterval(this.nextSlide, 3000, { passive: true });
   }
 
   render() {
@@ -377,17 +377,6 @@ class Slider {
     this.listeners();
   }
 }
-
-// Toggle active link
-const links = document.querySelectorAll(".js-nav a");
-
-links.forEach((link) => {
-  link.addEventListener("click", (e) => {
-    e.preventDefault();
-    links.forEach((other) => other.classList.remove("is-active"));
-    link.classList.add("is-active");
-  });
-});
 
 // Init classes
 const slider = new Slider();
