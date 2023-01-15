@@ -212,9 +212,6 @@ class Slider {
     const current = this.slides[this.data.current];
     const next = this.slides[this.data.next];
 
-    const currentImages = current.querySelectorAll(".js-slide__img");
-    const nextImages = next.querySelectorAll(".js-slide__img");
-
     const currentText = current.querySelectorAll(".js-slider__text-line div");
     const nextText = next.querySelectorAll(".js-slider__text-line div");
 
@@ -247,29 +244,15 @@ class Slider {
       this.state.initial = false;
     }
 
-    tl.staggerFromTo(
-      currentImages,
+    tl.to(
+      currentBulletTxt,
       1.5,
       {
-        yPercent: 0,
-        scale: 1,
+        alpha: 0.25,
+        ease: Linear.easeNone,
       },
-      {
-        yPercent: -185,
-        scaleY: 1.5,
-        ease: Expo.easeInOut,
-      },
-      0.075
+      0
     )
-      .to(
-        currentBulletTxt,
-        1.5,
-        {
-          alpha: 0.25,
-          ease: Linear.easeNone,
-        },
-        0
-      )
       .set(
         currentBulletLine,
         {
@@ -327,30 +310,15 @@ class Slider {
       );
     }
 
-    tl.staggerFromTo(
-      nextImages,
+    tl.to(
+      nextBulletTxt,
       1.5,
       {
-        yPercent: 150,
-        scaleY: 1.5,
+        alpha: 1,
+        ease: Linear.easeNone,
       },
-      {
-        yPercent: 0,
-        scaleY: 1,
-        ease: Expo.easeInOut,
-      },
-      0.075,
       1
     )
-      .to(
-        nextBulletTxt,
-        1.5,
-        {
-          alpha: 1,
-          ease: Linear.easeNone,
-        },
-        1
-      )
       .set(
         nextBulletLine,
         {
@@ -393,7 +361,6 @@ class Slider {
 
   listeners() {
     setInterval(this.nextSlide, 5000, { passive: true });
-    // window.addEventListener("wheel", this.nextSlide, { passive: true });
   }
 
   render() {
