@@ -20,6 +20,7 @@ export default defineConfig({
         style: path.resolve(__dirname, "./src/style.scss"),
         main: path.resolve(__dirname, "./src/index.html"),
         texture: path.resolve(__dirname, "./src/texture.html"),
+        effect: path.resolve(__dirname, "./src/effect.html"),
       },
       output: {
         assetFileNames: (assetInfo) => {
