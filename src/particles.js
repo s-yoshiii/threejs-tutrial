@@ -24,7 +24,28 @@ loader.load("./assets/star.png", function (texture) {
   render();
 });
 function createParticles(texture) {
-  let pGeometry, pMaterial, count, i;
+  let pGeometry,
+    pMaterial,
+    vertices,
+    count = 100;
+  pGeometry = new THREE.BufferGeometry();
+  vertices = new Float32Array(count * 3);
+  for (let i = 0; i < vertices.length; i += 3) {
+    let x = Math.random() * 200 - 100;
+    let y = Math.random() * 200 - 100;
+    let z = Math.random() * 200 - 100;
+    vertices[i] = x;
+    vertices[i + 1] = y;
+    vertices[i + 2] = z;
+    pGeometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+  }
+  pMaterial = new THREE.PointsMaterial({
+    map: texture,
+    size: 32,
+    blending: THREE.AdditiveBlending,
+    transparent: true,
+    depthTest: false,
+  });
   particles = new THREE.Points(pGeometry, pMaterial);
   scene.add(particles);
 }
@@ -42,6 +63,7 @@ document.getElementById("stage").appendChild(renderer.domElement);
 // renderer.render(scene, camera);
 function render() {
   requestAnimationFrame(render);
+  particles.rotation.y += 0.001;
   controls.update();
   renderer.render(scene, camera);
 }
