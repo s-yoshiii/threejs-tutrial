@@ -65,6 +65,10 @@ class Slider {
     this.scene = null;
     this.clock = null;
     this.camera = null;
+    this.mesh = null;
+    this.geometry = null;
+    this.canvas = null;
+    this.timeid = null;
 
     this.images = [
       "https://source.unsplash.com/46TvM-BVrRI/2560x1440",
@@ -138,8 +142,7 @@ class Slider {
     this.renderer = new THREE.WebGLRenderer({ alpha: true });
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.width, this.height);
-
-    this.inner.appendChild(this.renderer.domElement);
+    this.canvas = this.inner.appendChild(this.renderer.domElement);
   }
 
   loadTextures() {
@@ -189,15 +192,15 @@ class Slider {
       fragmentShader: this.frag,
     });
 
-    const geometry = new THREE.PlaneGeometry(
+    this.geometry = new THREE.PlaneGeometry(
       this.el.offsetWidth,
       this.el.offsetHeight,
       1
     );
 
-    const mesh = new THREE.Mesh(geometry, this.mat);
+    this.mesh = new THREE.Mesh(this.geometry, this.mat);
 
-    this.scene.add(mesh);
+    this.scene.add(this.mesh);
   }
 
   transitionNext() {
@@ -364,11 +367,26 @@ class Slider {
   }
 
   listeners() {
-    setInterval(this.nextSlide, 3000, { passive: true });
+    this.timeid = setInterval(this.nextSlide, 3000, { passive: true });
   }
 
   render() {
     this.renderer.render(this.scene, this.camera);
+  }
+  clear() {
+    this.canvas.remove();
+    clearInterval(this.timeid);
+    this.data = {
+      current: 0,
+    };
+    this.scene.remove(this.mesh);
+    this.geometry.dispose();
+    this.mat.dispose();
+    this.renderer.dispose();
+    // テクスチャーを削除する場合
+    // this.textures.map((texture) => {
+    //   texture.dispose();
+    // });
   }
   init() {
     this.setup();
@@ -381,7 +399,8 @@ class Slider {
   }
 }
 let slider = new Slider();
-
 window.addEventListener("resize", () => {
-  console.log(slider);
+  slider.clear();
+  slider = new Slider();
+  windowWidth = resizeWidth;
 });
