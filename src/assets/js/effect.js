@@ -402,5 +402,4 @@ let slider = new Slider();
 window.addEventListener("resize", () => {
   slider.clear();
   slider = new Slider();
-  windowWidth = resizeWidth;
 });
