@@ -23,6 +23,7 @@ export default defineConfig({
         particles: path.resolve(__dirname, "./src/particles.html"),
         picking: path.resolve(__dirname, "./src/picking.html"),
         effect: path.resolve(__dirname, "./src/effect.html"),
+        lensflares: path.resolve(__dirname, "./src/lensflares.html"),
       },
       output: {
         assetFileNames: (assetInfo) => {
