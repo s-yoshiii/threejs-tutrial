@@ -10,6 +10,7 @@ let scene,
   i,
   size,
   box,
+  mouse = new THREE.Vector2(),
   width = 1200,
   height = 900;
 // scene ステージ
@@ -41,6 +42,13 @@ for (i = 0; i < count; i++) {
   );
   scene.add(box);
 }
+
+// マウス座標を取得
+document.addEventListener("mousemove", (e) => {
+  let rect = e.target.getBoundingClientRect();
+  mouse.x = e.clientX - rect.left;
+  mouse.y = e.clientX - rect.top;
+});
 
 //renderer
 renderer = new THREE.WebGLRenderer({ antialias: true });
