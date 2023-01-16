@@ -19,7 +19,7 @@ const drawFunction = () => {
 
   // texture
   loader = new THREE.TextureLoader();
-  loader.load("./assets/logo_s02.png", function (texture) {
+  loader.load("./assets/img/logo_s02.png", function (texture) {
     createBox(texture);
     render();
   });

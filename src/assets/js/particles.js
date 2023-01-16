@@ -18,7 +18,7 @@ camera.lookAt(scene.position);
 
 // particles
 loader = new THREE.TextureLoader();
-loader.load("./assets/star.png", function (texture) {
+loader.load("./assets/img/star.png", function (texture) {
   createParticles(texture);
   render();
 });

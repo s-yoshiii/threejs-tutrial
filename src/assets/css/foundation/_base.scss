@@ -1,0 +1,122 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap");
+* {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  font-size: 62.5%;
+  -webkit-tap-highlight-color: rgba(165, 205, 255, 0.2);
+  height: 100%;
+  -ms-touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+  background: #fff;
+  scroll-behavior: smooth;
+  scroll-padding-top: 50px;
+}
+@media print, screen and (min-width: 768px) {
+  html {
+    font-size: 56.25%;
+    scroll-padding-top: 100px;
+  }
+}
+@media print, screen and (min-width: 1200px) {
+  html {
+    font-size: 62.5%;
+  }
+}
+
+html,
+body {
+  width: 100%;
+  -webkit-font-smoothing: antialiased;
+  min-width: 375px;
+  -ms-scroll-chaining: none;
+  overscroll-behavior: none;
+}
+@media print, screen and (min-width: 768px) {
+  html,
+  body {
+    min-width: 768px;
+  }
+}
+
+body {
+  font-size: 16px;
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.82);
+  background: #fff;
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Hiragino Sans",
+    Meiryo, sans-serif;
+  position: relative;
+  -webkit-animation: load 0.4s ease 0s;
+  animation: load 0.4s ease 0s;
+}
+
+a {
+  text-decoration: none;
+  -webkit-tap-highlight-color: rgba(0, 95, 181, 0.3);
+  -webkit-transition: color 0.2s;
+  transition: color 0.2s;
+  color: #1a6ec6;
+}
+a:focus {
+  outline: 0;
+}
+a:hover {
+  color: #0374ff;
+  text-decoration: underline;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+img {
+  vertical-align: bottom;
+  height: auto;
+}
+
+strong {
+  font-weight: 700;
+}
+
+hr {
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+}
+
+pre {
+  white-space: pre-wrap;
+}
+
+sup {
+  font-size: 8px;
+  font-size: 0.8rem;
+  vertical-align: 6px;
+}
+@media print, screen and (min-width: 768px) {
+  sup {
+    font-size: 10px;
+    font-size: 1rem;
+  }
+}
+
+/* CJK言語（中国語、日本語、韓国語）での句読点の間隔を変更。 */
+:root {
+  -ms-text-spacing: trim-start allow-end trim-adjacent ideograph-alpha
+    ideograph-numeric;
+  text-spacing: trim-start allow-end trim-adjacent ideograph-alpha
+    ideograph-numeric;
+  -webkit-font-variant-ligatures: none;
+  font-variant-ligatures: none;
+}

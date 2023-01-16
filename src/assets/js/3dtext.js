@@ -20,7 +20,7 @@ camera.lookAt(scene.position);
 
 // texture
 loader = new FontLoader();
-loader.load("./assets/Roboto_Regular.json", function (font) {
+loader.load("./assets/font/Roboto_Regular.json", function (font) {
   createText(font);
   render();
 });

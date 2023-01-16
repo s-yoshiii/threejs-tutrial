@@ -19,8 +19,8 @@ let scene,
   shadowHelper,
   renderer,
   controls,
-  width = 500,
-  height = 250,
+  width = 1200,
+  height = 900,
   theta = 0;
 // scene ステージ
 scene = new THREE.Scene();
