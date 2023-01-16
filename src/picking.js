@@ -10,7 +10,7 @@ let scene,
   i,
   size,
   box,
-  mouse = new THREE.Vector2(),
+  mouse = new THREE.Vector2(-2, -2),
   width = 1200,
   height = 900;
 // scene ステージ
@@ -44,12 +44,12 @@ for (i = 0; i < count; i++) {
 }
 
 // マウス座標を取得
+// WebGLの座標系に変換してみよう
 document.addEventListener("mousemove", (e) => {
   let rect = e.target.getBoundingClientRect();
   mouse.x = ((e.clientX - rect.left) / width) * 2 - 1;
   mouse.y = ((e.clientX - rect.top) / height) * -1 * 2 + 1;
 });
-// WebGLの座標系に変換してみよう
 
 //renderer
 renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -64,7 +64,18 @@ controls.autoRotate = true;
 document.getElementById("stage").appendChild(renderer.domElement);
 // renderer.render(scene, camera);
 function render() {
+  let raycaster = new THREE.Raycaster();
+  let objs;
+
   requestAnimationFrame(render);
+  // マウスから3D空間に光線を射出
+  raycaster.setFromCamera(mouse, camera);
+  //光線にあたった物体を取得、操作
+  objs = raycaster.intersectObjects(scene.children);
+  if (objs.length > 0) {
+    objs[0].object.material.emissive = new THREE.Color(0x999999);
+  }
+
   controls.update();
   renderer.render(scene, camera);
 }
