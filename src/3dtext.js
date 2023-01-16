@@ -1,5 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
+import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 let scene,
   text,
   camera,
@@ -8,47 +10,48 @@ let scene,
   loader,
   width = 1200,
   height = 900;
-const drawFunction = () => {
-  // scene ステージ
-  scene = new THREE.Scene();
+// scene ステージ
+scene = new THREE.Scene();
 
-  // camera
-  camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
-  camera.position.set(200, 100, 300);
-  camera.lookAt(scene.position);
+// camera
+camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
+camera.position.set(200, 100, 300);
+camera.lookAt(scene.position);
 
-  // texture
-  loader = new THREE.FontLoader();
-  loader.load("./assets/logo_s02.png", function (texture) {
-    createBox(texture);
-    render();
-  });
+// texture
+loader = new FontLoader();
+loader.load("./assets/Roboto_Regular.json", function (font) {
+  createText(font);
+  render();
+});
 
-  function createBox(texture) {
-    box = new THREE.Mesh(
-      new THREE.BoxGeometry(50, 50, 50),
-      new THREE.MeshBasicMaterial({ map: texture })
-    );
-    box.position.set(0, 0, 0);
-    scene.add(box);
-  }
+function createText(font) {
+  text = new THREE.Mesh(
+    new TextGeometry("S-YOSHII", {
+      font: font,
+      size: 24,
+      height: 8,
+    }),
+    new THREE.MeshBasicMaterial({ color: 0x39800, side: THREE.DoubleSide })
+  );
+  text.position.set(-80, 0, 0);
+  scene.add(text);
+}
 
-  //renderer
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(width, height);
-  renderer.setClearColor(0xefefef);
-  renderer.setPixelRatio(window.devicePixelRatio);
+//renderer
+renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(width, height);
+renderer.setClearColor(0xefefef);
+renderer.setPixelRatio(window.devicePixelRatio);
 
-  //controls
-  controls = new OrbitControls(camera, renderer.domElement);
+//controls
+controls = new OrbitControls(camera, renderer.domElement);
 
-  document.getElementById("stage").appendChild(renderer.domElement);
-  // renderer.render(scene, camera);
-  function render() {
-    requestAnimationFrame(render);
-    controls.update();
-    renderer.render(scene, camera);
-  }
-  // render();
-};
-drawFunction();
+document.getElementById("stage").appendChild(renderer.domElement);
+// renderer.render(scene, camera);
+function render() {
+  requestAnimationFrame(render);
+  controls.update();
+  renderer.render(scene, camera);
+}
+// render();
