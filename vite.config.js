@@ -21,6 +21,7 @@ export default defineConfig({
         main: path.resolve(__dirname, "./src/index.html"),
         texture: path.resolve(__dirname, "./src/texture.html"),
         particles: path.resolve(__dirname, "./src/particles.html"),
+        picking: path.resolve(__dirname, "./src/picking.html"),
         effect: path.resolve(__dirname, "./src/effect.html"),
       },
       output: {
