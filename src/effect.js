@@ -1,4 +1,6 @@
 import * as THREE from "three";
+
+// Init classes
 class Slider {
   constructor() {
     this.bindAll();
@@ -56,6 +58,8 @@ class Slider {
     this.inner = this.el.querySelector(".js-slider__inner");
     this.slides = [...this.el.querySelectorAll(".js-slide")];
     this.bullets = [...this.el.querySelectorAll(".js-slider-bullet")];
+    this.width = this.el.offsetWidth;
+    this.height = this.el.offsetHeight;
 
     this.renderer = null;
     this.scene = null;
@@ -133,7 +137,7 @@ class Slider {
 
     this.renderer = new THREE.WebGLRenderer({ alpha: true });
     this.renderer.setPixelRatio(window.devicePixelRatio);
-    this.renderer.setSize(this.el.offsetWidth, this.el.offsetHeight);
+    this.renderer.setSize(this.width, this.height);
 
     this.inner.appendChild(this.renderer.domElement);
   }
@@ -185,7 +189,7 @@ class Slider {
       fragmentShader: this.frag,
     });
 
-    const geometry = new THREE.PlaneBufferGeometry(
+    const geometry = new THREE.PlaneGeometry(
       this.el.offsetWidth,
       this.el.offsetHeight,
       1
@@ -366,7 +370,6 @@ class Slider {
   render() {
     this.renderer.render(this.scene, this.camera);
   }
-
   init() {
     this.setup();
     this.cameraSetup();
@@ -377,6 +380,8 @@ class Slider {
     this.listeners();
   }
 }
+let slider = new Slider();
 
-// Init classes
-const slider = new Slider();
+window.addEventListener("resize", () => {
+  console.log(slider);
+});
