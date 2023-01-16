@@ -46,9 +46,10 @@ for (i = 0; i < count; i++) {
 // マウス座標を取得
 document.addEventListener("mousemove", (e) => {
   let rect = e.target.getBoundingClientRect();
-  mouse.x = e.clientX - rect.left;
-  mouse.y = e.clientX - rect.top;
+  mouse.x = ((e.clientX - rect.left) / width) * 2 - 1;
+  mouse.y = ((e.clientX - rect.top) / height) * -1 * 2 + 1;
 });
+// WebGLの座標系に変換してみよう
 
 //renderer
 renderer = new THREE.WebGLRenderer({ antialias: true });
