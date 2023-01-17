@@ -18,14 +18,25 @@ class lensFlares {
     this.height = window.innerHeight;
     this.init();
   }
-  createScene() {
+  setup() {
+    this.scene = new THREE.Scene();
+    this.clock = new THREE.Clock();
+    this.renderer = new THREE.WebGLRenderer();
+    this.renderer.setSize(this.width, this.height);
+    this.canvas = this.renderer.domElement;
+  }
+  cameraSetup() {
     this.camera = new THREE.PerspectiveCamera(
       40,
       this.width / this.height,
       1,
       15000
     );
-    this.scene = new THREE.Scene();
+    this.dirlight = new THREE.DirectionalLight(0xffffff, 0.03);
+    this.scene.add(this.dirlight);
+    this.addLight(0.08, 0.3, 0.9, 0, 0, -1000);
+  }
+  createMesh() {
     const size = 250;
     this.geometry = new THREE.BoxGeometry(size, size, size);
     this.material = new THREE.MeshPhongMaterial({
@@ -43,9 +54,6 @@ class lensFlares {
       mesh.rotation.z = Math.random() * Math.PI;
       this.scene.add(mesh);
     }
-    this.dirlight = new THREE.DirectionalLight(0xffffff, 0.03);
-    this.scene.add(this.dirlight);
-    this.addLight(0.08, 0.3, 0.9, 0, 0, -1000);
   }
   addLight(h, s, l, x, y, z) {
     const light = new THREE.PointLight(0xffffff, 1.5, 2000);
@@ -54,23 +62,20 @@ class lensFlares {
     this.scene.add(light);
   }
   render() {
-    this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setSize(this.width, this.height);
-    this.canvas = this.renderer.domElement;
     document.getElementById("stage").appendChild(this.canvas);
   }
-  mouse() {
-    this.clock = new Clock();
-    this.controls = new FlyControls(this.camera, this.canvas);
-  }
+  mouse() {}
   animate() {
+    this.controls = new FlyControls(this.camera, this.canvas);
+    this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(this.animate);
     this.delta = this.clock.getDelta();
     this.controls.update(this.delta);
-    this.renderer.render(this.scene, this.camera);
   }
   init() {
-    this.createScene();
+    this.setup();
+    this.cameraSetup();
+    this.createMesh();
     this.render();
     this.mouse();
     this.animate();
