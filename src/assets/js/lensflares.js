@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { Clock } from "three";
 import { FlyControls } from "three/examples/jsm/controls/FlyControls";
 
 class lensFlares {
