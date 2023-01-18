@@ -19,11 +19,16 @@ class lensFlares {
     this.init();
     this.animate();
   }
-  init() {
+  setup() {
     // setup
     this.container = document.getElementById("stage");
     this.clock = new THREE.Clock(true);
-
+    // scene
+    this.scene = new THREE.Scene();
+    this.scene.background = new THREE.Color().setHSL(0.51, 0.4, 0.01);
+    this.scene.fog = new THREE.Fog(this.scene.background, 3500, 15000);
+  }
+  cameraSetup() {
     // camera
     this.camera = new THREE.PerspectiveCamera(
       40,
@@ -32,15 +37,13 @@ class lensFlares {
       15000
     );
     this.camera.position.z = 250;
-    // scene
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color().setHSL(0.51, 0.4, 0.01);
-    this.scene.fog = new THREE.Fog(this.scene.background, 3500, 15000);
-
+  }
+  helper() {
     // helper
     const axes = new THREE.AxesHelper(250);
     this.scene.add(axes);
-
+  }
+  createMesh() {
     // geometry
     const size = 250;
     const geometry = new THREE.BoxGeometry(size, size, size);
@@ -68,24 +71,29 @@ class lensFlares {
 
       this.scene.add(mesh);
     }
+  }
+  createLight() {
     // 平行光線
     const dirLight = new THREE.DirectionalLight(0xffffff, 0.03);
     dirLight.position.set(0, -1, 0).normalize(); //Y軸下方向から光源が出てる。
     dirLight.color.setHSL(0.1, 0.7, 0.5);
     this.scene.add(dirLight);
-
+    this.addLight(0.08, 0.3, 0.9, 0, 0, -1000);
+  }
+  setTexture() {
     // レンズフレア
     const textureLoader = new THREE.TextureLoader();
     const textureFlare = textureLoader.load("/assets/img/LensFlare.png");
-    this.addLight(0.08, 0.3, 0.9, 0, 0, -1000);
-
+  }
+  setRender() {
     // renderer
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.outputEncoding = THREE.sRGBEncoding;
     this.container.appendChild(this.renderer.domElement);
-
+  }
+  controlsSet() {
     // controles
     this.controls = new FlyControls(this.camera, this.renderer.domElement);
     this.controls.movementSpeed = 2500;
@@ -93,9 +101,13 @@ class lensFlares {
     this.controls.rollSpeed = Math.PI / 20;
     this.controls.autoForward = false;
     this.controls.dragToLook = false;
+  }
+  setStats() {
     // stats
     this.stats = new Stats();
     this.container.appendChild(this.stats.dom);
+  }
+  listeners() {
     // リサイズしたら自動でウインドウをリサイズする
     window.addEventListener("resize", this.onWindowResize);
   }
@@ -125,6 +137,18 @@ class lensFlares {
     const delta = this.clock.getDelta();
     this.controls.update(delta);
     this.renderer.render(this.scene, this.camera);
+  }
+  init() {
+    this.setup();
+    this.cameraSetup();
+    this.helper();
+    this.createMesh();
+    this.createLight();
+    this.setTexture();
+    this.setRender();
+    this.controlsSet();
+    this.setStats();
+    this.listeners();
   }
 }
 
