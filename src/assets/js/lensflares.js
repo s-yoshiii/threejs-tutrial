@@ -1,83 +1,130 @@
 import * as THREE from "three";
 import { FlyControls } from "three/examples/jsm/controls/FlyControls";
+import {
+  Lensflare,
+  LensflareElement,
+} from "three/examples/jsm/objects/Lensflare";
+import Stats from "three/examples/jsm/libs/stats.module";
 
 class lensFlares {
   constructor() {
-    this.canvas = null;
+    this.container = null;
+    this.stats = null;
     this.camera = null;
     this.scene = null;
     this.renderer = null;
-    this.geometry = null;
-    this.material = null;
-    this.dirlight = null;
-    this.clock = null;
     this.controls = null;
     this.delta = null;
-    this.width = window.innerWidth;
-    this.height = window.innerHeight;
+
     this.init();
+    this.animate();
   }
-  setup() {
-    this.scene = new THREE.Scene();
-    this.clock = new THREE.Clock();
-    this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setSize(this.width, this.height);
-    this.canvas = this.renderer.domElement;
-  }
-  cameraSetup() {
+  init() {
+    // setup
+    this.container = document.getElementById("stage");
+    this.clock = new THREE.Clock(true);
+
+    // camera
     this.camera = new THREE.PerspectiveCamera(
       40,
-      this.width / this.height,
+      window.innerWidth / window.innerHeight,
       1,
       15000
     );
-    this.dirlight = new THREE.DirectionalLight(0xffffff, 0.03);
-    this.scene.add(this.dirlight);
-    this.addLight(0.08, 0.3, 0.9, 0, 0, -1000);
-  }
-  createMesh() {
+    this.camera.position.z = 250;
+    // scene
+    this.scene = new THREE.Scene();
+    this.scene.background = new THREE.Color().setHSL(0.51, 0.4, 0.01);
+    this.scene.fog = new THREE.Fog(this.scene.background, 3500, 15000);
+
+    // helper
+    const axes = new THREE.AxesHelper(250);
+    this.scene.add(axes);
+
+    // geometry
     const size = 250;
-    this.geometry = new THREE.BoxGeometry(size, size, size);
-    this.material = new THREE.MeshPhongMaterial({
+    const geometry = new THREE.BoxGeometry(size, size, size);
+    const material = new THREE.MeshPhongMaterial({
       color: 0xffffff,
-      specular: 0xfffffff,
-      shininess: 50,
+      specular: 0xffffff, //鏡面反射
+      shininess: 50, //輝度
     });
+    //立方体を2500個生成
     for (let i = 0; i < 2500; i++) {
-      const mesh = new THREE.Mesh(this.geometry, this.material);
+      const mesh = new THREE.Mesh(geometry, material);
+
+      //位置をランダムに決める
       mesh.position.x = 8000 * (2.0 * Math.random() - 1.0);
       mesh.position.y = 8000 * (2.0 * Math.random() - 1.0);
       mesh.position.z = 8000 * (2.0 * Math.random() - 1.0);
+
+      //回転度合をランダムに決める
       mesh.rotation.x = Math.random() * Math.PI;
       mesh.rotation.y = Math.random() * Math.PI;
       mesh.rotation.z = Math.random() * Math.PI;
+
+      mesh.matrixAutoUpdate = false; //自動で行列計算されるのを制御する
+      mesh.updateMatrix(); //手動で行列更新する。
+
       this.scene.add(mesh);
     }
+    // 平行光線
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.03);
+    dirLight.position.set(0, -1, 0).normalize(); //Y軸下方向から光源が出てる。
+    dirLight.color.setHSL(0.1, 0.7, 0.5);
+    this.scene.add(dirLight);
+
+    // レンズフレア
+    const textureLoader = new THREE.TextureLoader();
+    const textureFlare = textureLoader.load("/assets/img/LensFlare.png");
+    this.addLight(0.08, 0.3, 0.9, 0, 0, -1000);
+
+    // renderer
+    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.outputEncoding = THREE.sRGBEncoding;
+    this.container.appendChild(this.renderer.domElement);
+
+    // controles
+    this.controls = new FlyControls(this.camera, this.renderer.domElement);
+    this.controls.movementSpeed = 2500;
+    this.controls.domElement = this.container;
+    this.controls.rollSpeed = Math.PI / 20;
+    this.controls.autoForward = false;
+    this.controls.dragToLook = false;
+    // stats
+    this.stats = new Stats();
+    this.container.appendChild(this.stats.dom);
+    // リサイズしたら自動でウインドウをリサイズする
+    window.addEventListener("resize", this.onWindowResize);
   }
   addLight(h, s, l, x, y, z) {
-    const light = new THREE.PointLight(0xffffff, 1.5, 2000);
+    const light = new THREE.PointLight(0xffffff, 1.5, 2000); //色、強さ、減衰
     light.color.setHSL(h, s, l);
     light.position.set(x, y, z);
     this.scene.add(light);
+
+    const lensflare = new Lensflare();
+    lensflare.addElement(
+      new LensflareElement(this.textureFlare, 700, 0, light.color)
+    );
+    light.add(lensflare);
+  }
+  onWindowResize() {
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+  }
+  animate() {
+    requestAnimationFrame(() => this.animate());
+    this.render();
+    this.stats.update();
   }
   render() {
-    document.getElementById("stage").appendChild(this.canvas);
-  }
-  mouse() {}
-  animate() {
-    this.controls = new FlyControls(this.camera, this.canvas);
+    const delta = this.clock.getDelta();
+    this.controls.update(delta);
     this.renderer.render(this.scene, this.camera);
-    requestAnimationFrame(this.animate);
-    this.delta = this.clock.getDelta();
-    this.controls.update(this.delta);
-  }
-  init() {
-    this.setup();
-    this.cameraSetup();
-    this.createMesh();
-    this.render();
-    this.mouse();
-    this.animate();
   }
 }
 
