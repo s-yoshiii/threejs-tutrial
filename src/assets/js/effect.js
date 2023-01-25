@@ -68,7 +68,7 @@ class Slider {
     this.mesh = null;
     this.geometry = null;
     this.canvas = null;
-    this.timeid = null;
+    // this.timeid = null;
 
     this.images = [
       "https://source.unsplash.com/46TvM-BVrRI/2560x1440",
@@ -164,6 +164,7 @@ class Slider {
       }
 
       this.textures.push(texture);
+      // console.log(this.textures);
     });
 
     this.disp = loader.load(
@@ -367,26 +368,21 @@ class Slider {
   }
 
   listeners() {
-    this.timeid = setInterval(this.nextSlide, 3000, { passive: true });
+    // this.timeid = setInterval(this.nextSlide, 3000, { passive: true });
+    setInterval(this.nextSlide, 3000, { passive: true });
+    window.addEventListener("resize", () => {
+      this.onWindowResize();
+      console.log("Resize");
+    });
   }
-
+  onWindowResize() {
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+  }
   render() {
     this.renderer.render(this.scene, this.camera);
-  }
-  clear() {
-    this.canvas.remove();
-    clearInterval(this.timeid);
-    this.data = {
-      current: 0,
-    };
-    this.scene.remove(this.mesh);
-    this.geometry.dispose();
-    this.mat.dispose();
-    this.renderer.dispose();
-    // テクスチャーを削除する場合
-    // this.textures.map((texture) => {
-    //   texture.dispose();
-    // });
   }
   init() {
     this.setup();
@@ -398,8 +394,4 @@ class Slider {
     this.listeners();
   }
 }
-let slider = new Slider();
-window.addEventListener("resize", () => {
-  slider.clear();
-  slider = new Slider();
-});
+new Slider();
